@@ -1,3 +1,3 @@
 # K8s-Notes
 
-Personal Notes for K8s useful commands and security testing
+This is a personal repository for quick and dirty notes on security testing kubernetes environments
