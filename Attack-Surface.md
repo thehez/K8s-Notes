@@ -1,3 +1,5 @@
+# Attack Surface 
+
 ## Access to Node/VM
 
 Nodes are bare-metal machines or VMs and are a viable point of entry for attackers. Server hardening should be carried out to ensure no uneccesary open ports etc. 
@@ -32,11 +34,26 @@ Containers require their own level of security. Images should be scanned for vul
 from a secure repository. Running the latest images is recommended and kubernetes should be configured to always pull images from the repository on each execution.
 
 ### Container breakout
+
 factors that can lead to breakout include:
 * kernel vulns - containers share the same kernel
 * bad configurations - ensure pods/containers don't run as privileged
 * mounted filesystems - mounting host filesystems enable attackers to modify the filesystem and escalate host privs
 * mounted network sockets - mounting the runtime daemon socket inside a container - allows trivial breakout
 
+# Security boundaries
 
+### Cluster
+Consideration should be given to allocate clusters to specific domains such as test, dev, staging, prod etc for various levels of required hardening at each stage and reduce risk accross domains.
 
+### Node
+Nodes may serve one or more control plane, worker node etcd... Sensitive workloads should be seperated by assigning pods to specific nodes by using *nodeSelector, node or pod affinity* The *nodeAuthorizer* is key to limiting the blast radius of a compromised pod or node.
+
+### Namespaces
+RBAC will implement Namespaces as the basic unit of authorisation. Admission control is applied at the namespace level and prevents depletion of resources (stealing data) as well as preventing DoS style attacks.
+
+### Pod 
+All containers in a pod are guarenteed to only run on the node hosting the pod. This architecture helps with the scope of security context and policies. Network policies at the pod level should be used to further enhance isolation of workloads.
+
+### Container
+Containers are essentially a combination of cgroups, namespaces, and copy-on-write filesystems. Pod restraints on container runtimes may provide added isolation and security, but, sandboxing and runtime protection is needed to further protect systems.
