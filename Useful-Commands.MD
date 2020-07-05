@@ -2,7 +2,7 @@
 
 #### This is a quick and dirty list of useful k8s commands to be used during security assessments. The list will be organised and neatened up later!!
 
-## Commands
+## Basic discovery commands
 
 *kubectl cluster-info* - retrieve cluster information including master node and dns
 
@@ -21,18 +21,29 @@
 
 *kubectl api-resources -o wide* - retrieve all resources available to cluster  
 
+*kubectl logs <pod>* - get the pods logs
+
+## Execute commands
+
 *kubectl exec -it -- <pod> <namespace>* - run a command on a pod
   *kubectl exec -it -- <pod> /bin/bash* - open a shell on a pod
   
-*kubectl get serviceaccount/SA* - list available service accounts
-
 *kubectl port-forward <pod> 8081:80* - forward port (example forwards 80 to 8081 on a pod)
-
-*kubectl logs <pod>* - get the pods logs
 
 *kubectl drain [node_name] --ignore-daemonsets* - evict pods on a node
 
 *kubectl delete node [node_name]*
 
+## Get tokens
 
+*kubectl get serviceaccount/SA* - list available service accounts
 
+*kubectl get serviceaccount <serviceaccountname> -o yaml* - list a specific service account and associated secret token
+ 
+*kubectl get secrets* - display available tokens
+
+*kubectl get secrets <serviceaccount-token-name> -o yaml* - obtain that service accounts encoded token 
+ 
+ **the token is JWT use a decoder to try and obtain token information**
+ 
+ 
