@@ -21,7 +21,7 @@ Kubernetes supports the following modes:
 * webhook - uses HTTP callbacks for integration with kubernetes external authorisers
 * Role based access control (RBAC) - the defacto standard for auth. 
 
-## RBAC ##
+## RBAC 
 **concepts**
 * entity - a group, user, or service account
 * resource - a pod, secret or service an entity may try to access
@@ -36,4 +36,18 @@ Kubernetes supports the following modes:
 **RBAC Tooling**
 * audit2rbac - automatically determaine what permissions are necessary for applications and can generate RBAC role bindings as required.
 * rbac-manager - a kubernetes operator that simplifies the management of role bindings and service accounts 
+
+## Admission controllers
+Admission controllers are the final step before kubernetes persists a change in etcd. Kubernetes supports over 30 admission controllers but some relevant ones are listed below
+
+* AlwaysPullImages - good for image hygiene, pulling fresh images ensures that any vulnerability patches applied upstream will be present in the image
+* DenyEscalatingExec - ensures exec and attach commands are blocked from sensitive containers
+* PodSecurityPolicy - pod admission based on security context and available policies
+* LimitRange & Resource Quota - used to prevent DoS and spawning unauthorised processes
+* NodeRestriction - limits the permissions of each kubelet to only modify pods that are bound to it and its own node object
+
+**Enabling admission controllers**
+the kubernetes API server flag *--enable-admission-plugins=<admissioncontroller> takes a comma delimited list of admission control plugins to invoke.
+ 
+
 
